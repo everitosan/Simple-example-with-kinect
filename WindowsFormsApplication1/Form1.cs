@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.Kinect;
@@ -16,6 +10,7 @@ namespace WindowsFormsApplication1
     public partial class Form1 : Form
     {
         private KinectSensor Ksensor;
+        private byte[] pixelData;
 
         public Form1()
         {
@@ -33,9 +28,9 @@ namespace WindowsFormsApplication1
                     TriggerBtn.Text = "Stop";
                     Ksensor.Start();
                     connectionText.Text = Ksensor.DeviceConnectionId;
-
-                    Ksensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-                    Ksensor.ColorFrameReady += Ksensor_ColorFrameReady;
+                    
+                    Ksensor.SkeletonStream.Enable();
+                    Ksensor.SkeletonFrameReady += Ksensor_SkeletonFrameReady; ;
                 }
             }
             else {
@@ -46,6 +41,13 @@ namespace WindowsFormsApplication1
                 }
             }
 
+        }
+
+        private void Ksensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            using (var sk_frame = e.OpenSkeletonFrame())
+                if (sk_frame != null)
+                    DetectSkeleton(sk_frame);
         }
 
         private void Ksensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
@@ -65,22 +67,34 @@ namespace WindowsFormsApplication1
             statusText.Text = Ksensor.Status.ToString();
         }
 
+        private void DetectSkeleton(SkeletonFrame frame)
+        {
+            Skeleton[] skData;
+            skData = new Skeleton[frame.SkeletonArrayLength];
+            frame.CopySkeletonDataTo(skData);
+
+            foreach (Skeleton sk in skData)
+            {
+                //test if he skeleton it's trackable
+                if (sk.TrackingState == SkeletonTrackingState.Tracked)
+                {
+                    Joint head = sk.Joints[JointType.Head];
+                    SkeletonPoint head_pos = head.Position;
+                    position.Text = string.Format("Head is in x: {0}, y: {1}, z: {2}", head_pos.X, head_pos.Y, head_pos.Z);
+                }
+            }
+        }
+
         private Bitmap CreateBimapFromsensor(ColorImageFrame Frame)
         {
-            var pixelData = new byte[Frame.PixelDataLength];
+            pixelData = new byte[Frame.PixelDataLength];
             Frame.CopyPixelDataTo(pixelData);
 
-            return pixelData.ToBitmap(Frame.Width, Frame.Height);
+           return pixelData.ToBitmap(Frame.Width, Frame.Height);
+        }
 
-           /* var stride = Frame.Width * Frame.BytesPerPixel;
-            var bmpFrame = new Bitmap(Frame.Width, Frame.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb );
-            var bpmData = bmpFrame.LockBits( new Rectangle(0,0,streamBox.Width, streamBox.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, bmpFrame.PixelFormat);
-
-            System.Runtime.InteropServices.Marshal.Copy(pixelData, 0, bpmData.Scan0, Frame.PixelDataLength);
-
-            bmpFrame.UnlockBits(bpmData);
-
-            return bmpFrame;*/
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
     }

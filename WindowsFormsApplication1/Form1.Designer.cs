@@ -34,6 +34,8 @@
             this.connectionText = new System.Windows.Forms.Label();
             this.TriggerBtn = new System.Windows.Forms.Button();
             this.streamBox = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.position = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.streamBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,7 +78,7 @@
             // TriggerBtn
             // 
             this.TriggerBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.TriggerBtn.Location = new System.Drawing.Point(32, 145);
+            this.TriggerBtn.Location = new System.Drawing.Point(32, 257);
             this.TriggerBtn.Name = "TriggerBtn";
             this.TriggerBtn.Size = new System.Drawing.Size(144, 41);
             this.TriggerBtn.TabIndex = 4;
@@ -86,18 +88,39 @@
             // 
             // streamBox
             // 
-            this.streamBox.Location = new System.Drawing.Point(32, 208);
+            this.streamBox.Location = new System.Drawing.Point(32, 328);
             this.streamBox.Name = "streamBox";
             this.streamBox.Size = new System.Drawing.Size(1500, 626);
             this.streamBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.streamBox.TabIndex = 5;
             this.streamBox.TabStop = false;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(38, 162);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 25);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Posición:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // position
+            // 
+            this.position.AutoSize = true;
+            this.position.Location = new System.Drawing.Point(153, 162);
+            this.position.Name = "position";
+            this.position.Size = new System.Drawing.Size(19, 25);
+            this.position.TabIndex = 7;
+            this.position.Text = "-";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1577, 926);
+            this.ClientSize = new System.Drawing.Size(1577, 998);
+            this.Controls.Add(this.position);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.streamBox);
             this.Controls.Add(this.TriggerBtn);
             this.Controls.Add(this.connectionText);
@@ -120,6 +143,8 @@
         private System.Windows.Forms.Label connectionText;
         private System.Windows.Forms.Button TriggerBtn;
         private System.Windows.Forms.PictureBox streamBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label position;
     }
 }
 
